@@ -28,7 +28,9 @@ app.post('/', paymentValidationRules(), validate, async function (req, res) {
   }
 })
  
-app.listen(process.env.HOST)
+const port = process.env.NODE_ENV === 'test' ? process.env.HOST_TEST : process.env.HOST
+console.log('running on port ', port);
+app.listen(port)
 
 module.exports = {
   app
