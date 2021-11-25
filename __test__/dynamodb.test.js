@@ -1,4 +1,4 @@
-const { mockDdb } = require("./dynamo-mock");
+const { mockDdb } = require("../dynamo-mock");
 
 it("should insert payment into table", async () => {
   await mockDdb

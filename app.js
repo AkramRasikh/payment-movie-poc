@@ -4,11 +4,11 @@ const app = express()
 const bodyParser = require('body-parser')
 const uuid = require('uuid');
 const { getPayments, addPayment } = require('./payment-aws-methods');
-const { validationResult } = require('express-validator');
+const { paymentValidationRules, validate } = require('./validator');
 
 app.use(bodyParser.json())
 
-app.get('/', async function (req, res) {
+app.get('/', async function (_, res) {
   try {
     const { Items: allPayments } = await getPayments()
     res.status(200).send(allPayments)
@@ -17,20 +17,19 @@ app.get('/', async function (req, res) {
   }
 })
  
-app.post('/', async function (req, res) {
-  const errors = validationResult(req);
-  if (errors) {
-    res.status(422).send({ errors: errors.mapped() })
-  }
-  
+app.post('/', paymentValidationRules(), validate, async function (req, res) {
   const uuid1 = uuid.v1();
   const paymentReq = req.body.payment
   try {
     await addPayment({ paymentId: uuid1, amount: paymentReq })
-    res.send('payment sent!')
+    return res.status(200).send('payment sent')
   } catch (error) {
-    res.status(400)
+    return res.status(400).send()
   }
 })
  
-app.listen(3002)
+app.listen(process.env.HOST)
+
+module.exports = {
+  app
+}
