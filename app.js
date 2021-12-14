@@ -7,7 +7,8 @@ const { paymentValidationRules, validate } = require('./validator');
 
 app.use(bodyParser.json());
 
-app.get('/', async function (_, res) {
+app.get('/payments', async function (_, res) {
+  console.log('hitting payments GET');
   try {
     const { Items: allPayments } = await getPayments();
     res.status(200).send(allPayments);

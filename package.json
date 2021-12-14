@@ -5,6 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
+    "create-table": "node aws/create-table.js",
+    "put-item": "node aws/put-item.js",
     "test": "jest"
   },
   "author": "",
